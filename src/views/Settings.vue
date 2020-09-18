@@ -5,11 +5,29 @@
         <div
           class="px-4 mx-auto mt-10 max-w-screen-xl sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28"
         >
+          <div class="py-10 sm:text-center lg:text-left">
+            <h2
+              class="pb-10 text-2xl font-extrabold tracking-tight leading-10 text-primary-900 sm:text-3xl sm:leading-none md:text-4xl"
+            >
+              Colors
+            </h2>
+            <table>
+              <tr>
+                <td class="p-3">primary:</td>
+                <td ref="primaryPickr"><div></div></td>
+              </tr>
+              <tr>
+                <td class="p-3">secondary:</td>
+                <td ref="secondaryPickr"><div></div></td>
+              </tr>
+            </table>
+          </div>
+
           <div class="sm:text-center lg:text-left">
             <h2
               class="text-4xl font-extrabold tracking-tight leading-10 text-primary-900 sm:text-5xl sm:leading-none md:text-6xl"
             >
-              This demo is using
+              This settings demo is using
               <br class="xl:hidden" />
               <a
                 target="_blank"
@@ -63,5 +81,79 @@
 </template>
 
 <script>
-export default {};
+import { defineComponent, ref, onMounted } from "vue";
+import { useColors } from "../App.vue";
+import Pickr from "@simonwep/pickr";
+import "@simonwep/pickr/dist/themes/nano.min.css";
+
+const pickrOptions = {
+  theme: "nano",
+  swatches: [
+    "rgba(244, 67, 54, 1)",
+    "rgba(233, 30, 99, 1)",
+    "rgba(156, 39, 176, 1)",
+    "rgba(103, 58, 183, 1)",
+    "rgba(63, 81, 181, 1)",
+    "rgba(33, 150, 243, 1)",
+    "rgba(3, 169, 244, 1)",
+    "rgba(0, 188, 212, 1)",
+    "rgba(0, 150, 136, 1)",
+    "rgba(76, 175, 80, 1)",
+    "rgba(139, 195, 74, 1)",
+    "rgba(205, 220, 57, 1)",
+    "rgba(255, 235, 59, 1)",
+    "rgba(255, 193, 7, 1)",
+  ],
+
+  components: {
+    // Main components
+    preview: true,
+    opacity: true,
+    hue: true,
+
+    // Input / output Options
+    interaction: {
+      hex: true,
+      rgba: true,
+      hsla: true,
+      hsva: true,
+      cmyk: true,
+      input: true,
+      clear: true,
+      save: true,
+    },
+  },
+};
+
+export default defineComponent({
+  setup() {
+    const secondaryPickr = ref();
+    const primaryPickr = ref();
+    const colors = useColors();
+
+    onMounted(() => {
+      // primary
+      Pickr.create({
+        el: primaryPickr.value.firstChild,
+        container: primaryPickr.value,
+        default: colors.primary,
+        ...pickrOptions,
+      }).on("change", (color) => {
+        colors.primary = color.toRGBA().toString();
+      });
+
+      // secondary
+      Pickr.create({
+        el: secondaryPickr.value.firstChild,
+        container: secondaryPickr.value,
+        default: colors.secondary,
+        ...pickrOptions,
+      }).on("change", (color) => {
+        colors.secondary = color.toRGBA().toString();
+      });
+    });
+
+    return { secondaryPickr, primaryPickr };
+  },
+});
 </script>

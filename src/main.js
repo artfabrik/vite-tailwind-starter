@@ -3,6 +3,7 @@ import './assets/main.css'
 import App from './App.vue'
 import { routes } from './routes.js'
 import { createRouter, createWebHistory } from 'vue-router'
+// import "@simonwep/pickr/dist/themes/nano.min.css";
 
 let app = createApp(App)
 let router = createRouter({
